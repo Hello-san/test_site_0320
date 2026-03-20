@@ -1,24 +1,323 @@
+dex · HTML
+コピー
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>テストサイト</title>
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-WNZXRZZF');</script>
-<!-- End Google Tag Manager -->
+ 
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-WNZXRZZF');</script>
+  <!-- End Google Tag Manager -->
+ 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+ 
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+    :root {
+      --cream: #fdf6fa;
+      --charcoal: #2d1f3d;
+      --warm-gray: #9b7fa8;
+      --accent: #d46fa0;
+      --accent-dark: #b84f84;
+      --purple: #7c4daa;
+      --purple-light: #a87dd4;
+      --white: #ffffff;
+    }
+ 
+    html { scroll-behavior: smooth; }
+ 
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background-color: var(--cream);
+      color: var(--charcoal);
+      font-weight: 300;
+      line-height: 1.8;
+    }
+ 
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.2rem 2.5rem;
+      background: rgba(253, 246, 250, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(212, 111, 160, 0.2);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem; font-weight: 600; letter-spacing: 0.08em;
+      color: var(--charcoal); text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--warm-gray); text-decoration: none; transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+ 
+    /* HERO */
+    .hero {
+      min-height: 100vh; display: flex; flex-direction: column;
+      justify-content: center; align-items: center; text-align: center;
+      padding: 6rem 2rem 4rem; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(212,111,160,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(124,77,170,0.10) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--purple-light); margin-bottom: 1.5rem;
+      animation: fadeUp 0.8s ease both;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 8vw, 6rem); font-weight: 300;
+      line-height: 1.1; letter-spacing: -0.01em; color: var(--charcoal);
+      margin-bottom: 1.5rem; animation: fadeUp 0.8s 0.15s ease both;
+    }
+    .hero-title em { font-style: italic; color: var(--accent); }
+    .hero-sub {
+      font-size: 0.9rem; color: var(--warm-gray); max-width: 420px;
+      margin: 0 auto 3rem; animation: fadeUp 0.8s 0.3s ease both;
+    }
+    .hero-actions {
+      display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+      animation: fadeUp 0.8s 0.45s ease both;
+    }
+ 
+    /* BUTTONS */
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.9rem 2rem; font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.75rem; font-weight: 400; letter-spacing: 0.12em;
+      text-transform: uppercase; border: none; cursor: pointer;
+      transition: all 0.3s ease; text-decoration: none;
+      flex-direction: column;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--purple) 0%, var(--accent) 100%);
+      color: var(--white);
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--purple) 100%);
+      transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,111,160,0.4);
+    }
+    .btn-outline {
+      background: transparent; color: var(--charcoal);
+      border: 1px solid var(--charcoal);
+    }
+    .btn-outline:hover { background: var(--charcoal); color: var(--white); transform: translateY(-2px); }
+    .btn-accent { background: var(--accent); color: var(--white); }
+    .btn-accent:hover {
+      background: var(--accent-dark); transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(212,111,160,0.5);
+    }
+    .btn-white { background: var(--white); color: var(--charcoal); }
+    .btn-white:hover { background: var(--accent); color: var(--white); transform: translateY(-2px); }
+    .btn-ghost {
+      background: transparent; color: var(--white);
+      border: 1px solid rgba(255,255,255,0.4);
+    }
+    .btn-ghost:hover { border-color: var(--purple-light); color: var(--purple-light); transform: translateY(-2px); }
+ 
+    /* ボタンのサブラベル */
+    .btn-sublabel {
+      font-size: 0.6rem; opacity: 0.65; letter-spacing: 0.05em;
+      text-transform: none; font-weight: 300;
+    }
+ 
+    /* SHOP BANNER */
+    .shop-banner {
+      background: linear-gradient(135deg, var(--purple) 0%, var(--accent) 100%);
+      padding: 3rem 2rem; text-align: center; color: var(--white);
+    }
+    .shop-banner p { font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.8; margin-bottom: 0.8rem; }
+    .shop-banner h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 300;
+      margin-bottom: 1.5rem; letter-spacing: 0.03em;
+    }
+    .btn-shop {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.9rem 2.5rem; background: var(--white); color: var(--purple);
+      font-family: 'Noto Sans JP', sans-serif; font-size: 0.78rem;
+      font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+      text-decoration: none; transition: all 0.3s ease;
+    }
+    .btn-shop:hover {
+      background: var(--charcoal); color: var(--white);
+      transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    }
+ 
+    /* DIVIDER */
+    .divider {
+      display: flex; align-items: center; gap: 1.5rem;
+      max-width: 900px; margin: 0 auto; padding: 3rem 2rem 0;
+    }
+    .divider-line { flex: 1; height: 1px; background: rgba(212,111,160,0.3); }
+    .divider-text { font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); }
+ 
+    /* FEATURES */
+    .features { padding: 3rem 2rem 5rem; max-width: 1000px; margin: 0 auto; }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem; margin-top: 3rem;
+    }
+    .feature-card {
+      padding: 2.5rem; background: var(--white);
+      border: 1px solid rgba(212,111,160,0.15);
+      transition: all 0.3s ease; position: relative; overflow: hidden;
+    }
+    .feature-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--purple), var(--accent));
+      transform: scaleX(0); transition: transform 0.3s ease;
+    }
+    .feature-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
+    .feature-card:hover::before { transform: scaleX(1); }
+    .feature-number {
+      font-family: 'Cormorant Garamond', serif; font-size: 3rem; font-weight: 300;
+      color: rgba(124,77,170,0.25); line-height: 1; margin-bottom: 1rem;
+    }
+    .feature-title { font-size: 0.85rem; font-weight: 500; letter-spacing: 0.08em; margin-bottom: 0.75rem; }
+    .feature-text { font-size: 0.82rem; color: var(--warm-gray); line-height: 1.9; }
+ 
+    /* CTA */
+    .cta-section {
+      padding: 5rem 2rem; text-align: center;
+      background: linear-gradient(135deg, var(--charcoal) 0%, #4a2070 50%, #7c1f5a 100%);
+      color: var(--white);
+    }
+    .cta-section h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 300;
+      margin-bottom: 1rem; letter-spacing: 0.02em;
+    }
+    .cta-section > p { font-size: 0.85rem; color: rgba(255,255,255,0.6); margin-bottom: 2.5rem; }
+    .cta-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+ 
+    /* FOOTER */
+    footer {
+      text-align: center; padding: 2rem; font-size: 0.72rem;
+      letter-spacing: 0.1em; color: var(--warm-gray);
+      border-top: 1px solid rgba(212,111,160,0.15);
+    }
+ 
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+ 
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { gap: 1.2rem; }
+      .hero-actions { flex-direction: column; align-items: center; }
+      .btn { width: 100%; max-width: 280px; justify-content: center; }
+      .features-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) { .nav-links { display: none; } }
+  </style>
 </head>
 <body>
+ 
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WNZXRZZF"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
-  <h1>テストサイト</h1>
-  <button id="btn-contact">お問い合わせ</button>
-  <button id="btn-download">資料ダウンロード</button>
-  <button id="btn-cart">カートに追加</button>
+ 
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">TestSite</a>
+  <ul class="nav-links">
+    <li><a href="#features">特徴</a></li>
+    <li><a href="#contact">お問い合わせ</a></li>
+    <li><a href="shop.html">ショップ</a></li>
+  </ul>
+</nav>
+ 
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-eyebrow">GTM Test Site</p>
+  <h1 class="hero-title">シンプルで<br><em>美しい</em>体験を</h1>
+  <p class="hero-sub">Googleタグマネージャーの動作確認用テストサイトです。各ボタンのクリックイベントを計測します。</p>
+  <div class="hero-actions">
+    <!-- ヒーロー上部のお問い合わせ → GTMで btn-contact-hero として計測 -->
+    <button id="btn-contact-hero" class="btn btn-primary">
+      お問い合わせ
+      <span class="btn-sublabel">トップから</span>
+    </button>
+    <button id="btn-download" class="btn btn-outline">資料ダウンロード</button>
+    <button id="btn-cart" class="btn btn-accent">カートに追加</button>
+  </div>
+</section>
+ 
+<!-- SHOP BANNER -->
+<div class="shop-banner">
+  <p>D2C計測の練習はこちら</p>
+  <h2>カート・お気に入り・購入を<br>計測してみよう</h2>
+  <a href="shop.html" id="btn-go-shop" class="btn-shop">ショップページへ →</a>
+</div>
+ 
+<!-- DIVIDER -->
+<div class="divider">
+  <div class="divider-line"></div>
+  <span class="divider-text">Features</span>
+  <div class="divider-line"></div>
+</div>
+ 
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-number">01</div>
+      <div class="feature-title">クリック計測</div>
+      <p class="feature-text">各ボタンのクリック数をGTMで個別に計測。GA4のリアルタイムレポートで確認できます。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-number">02</div>
+      <div class="feature-title">イベント分析</div>
+      <p class="feature-text">お問い合わせ・資料DL・カート追加の3種類のイベントをそれぞれ独立して追跡します。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-number">03</div>
+      <div class="feature-title">レスポンシブ対応</div>
+      <p class="feature-text">スマートフォン・タブレット・PCのすべての画面サイズで快適に表示されます。</p>
+    </div>
+  </div>
+</section>
+ 
+<!-- CTA（ページ下部のお問い合わせ） -->
+<section class="cta-section" id="contact">
+  <h2>お気軽にご連絡ください</h2>
+  <p>ご質問・ご相談はこちらから</p>
+  <div class="cta-buttons">
+    <!-- ページ下部のお問い合わせ → GTMで btn-contact-footer として計測 -->
+    <button id="btn-contact-footer" class="btn btn-white">
+      お問い合わせ
+      <span class="btn-sublabel">ページ下部から</span>
+    </button>
+    <button id="btn-download-footer" class="btn btn-ghost">資料ダウンロード</button>
+  </div>
+</section>
+ 
+<!-- FOOTER -->
+<footer>
+  <p>&copy; 2026 TestSite — GTM Learning Project</p>
+</footer>
+ 
 </body>
 </html>
