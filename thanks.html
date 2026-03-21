@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ご購入ありがとうございます — テストサイト</title>
- 
+
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -12,11 +12,35 @@
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','GTM-WNZXRZZF');</script>
   <!-- End Google Tag Manager -->
- 
+
+  <!-- ★ データレイヤー：purchaseイベント（ページ表示時に自動発火） -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    // URLパラメーターから注文情報を取得
+    const params = new URLSearchParams(window.location.search);
+    const orderTotal = parseInt(params.get('total') || '0');
+    const orderItems = JSON.parse(decodeURIComponent(params.get('items') || '[]'));
+    const orderId = 'ORDER-' + String(Math.floor(Math.random() * 99999)).padStart(5, '0');
+
+    dataLayer.push({ ecommerce: null });
+    dataLayer.push({
+      event: 'purchase',
+      ecommerce: {
+        transaction_id: orderId,   // 注文ID
+        value: orderTotal,         // 合計金額
+        currency: 'JPY',           // 通貨
+        items: orderItems.length > 0 ? orderItems : [
+          { item_name: 'テスト商品', item_id: 'SKU-000', price: orderTotal, quantity: 1 }
+        ]
+      }
+    });
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
- 
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -25,7 +49,7 @@
     }
     html { scroll-behavior: smooth; }
     body { font-family: 'Noto Sans JP', sans-serif; background-color: var(--cream); color: var(--charcoal); font-weight: 300; line-height: 1.8; min-height: 100vh; display: flex; flex-direction: column; }
- 
+
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; justify-content: space-between; align-items: center;
@@ -36,13 +60,20 @@
     .nav-links { display: flex; gap: 2rem; list-style: none; }
     .nav-links a { font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--warm-gray); text-decoration: none; transition: color 0.3s; }
     .nav-links a:hover { color: var(--accent); }
- 
-    /* MAIN */
+
+    /* データレイヤー確認パネル */
+    .datalayer-panel {
+      margin-top: 80px;
+      background: var(--charcoal); color: #a8d8a8;
+      font-family: monospace; font-size: 0.72rem; line-height: 1.6;
+      padding: 1rem 2rem; border-bottom: 2px solid var(--accent);
+    }
+    .datalayer-panel .panel-title { color: var(--accent); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 0.5rem; }
+
     .thanks-wrap {
       flex: 1; display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      padding: 8rem 2rem 4rem; text-align: center;
-      position: relative; overflow: hidden;
+      padding: 4rem 2rem; text-align: center; position: relative; overflow: hidden;
     }
     .thanks-wrap::before {
       content: ''; position: absolute; inset: 0;
@@ -51,8 +82,7 @@
         radial-gradient(ellipse at 70% 60%, rgba(124,77,170,0.08) 0%, transparent 55%);
       pointer-events: none;
     }
- 
-    /* チェックアイコン */
+
     .check-circle {
       width: 80px; height: 80px; border-radius: 50%;
       background: linear-gradient(135deg, var(--purple) 0%, var(--accent) 100%);
@@ -61,71 +91,57 @@
       animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
       box-shadow: 0 8px 32px rgba(212,111,160,0.4);
     }
- 
-    .thanks-eyebrow {
-      font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase;
-      color: var(--purple-light); margin-bottom: 1rem;
-      animation: fadeUp 0.6s 0.2s ease both;
-    }
-    .thanks-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2.5rem, 7vw, 5rem); font-weight: 300;
-      line-height: 1.1; color: var(--charcoal); margin-bottom: 1.2rem;
-      animation: fadeUp 0.6s 0.3s ease both;
-    }
+
+    .thanks-eyebrow { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--purple-light); margin-bottom: 1rem; animation: fadeUp 0.6s 0.2s ease both; }
+    .thanks-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.5rem, 7vw, 5rem); font-weight: 300; line-height: 1.1; color: var(--charcoal); margin-bottom: 1.2rem; animation: fadeUp 0.6s 0.3s ease both; }
     .thanks-title em { font-style: italic; color: var(--accent); }
-    .thanks-sub {
-      font-size: 0.88rem; color: var(--warm-gray); max-width: 400px;
-      margin: 0 auto 2.5rem; animation: fadeUp 0.6s 0.4s ease both;
-    }
- 
-    /* 注文番号 */
-    .order-box {
+    .thanks-sub { font-size: 0.88rem; color: var(--warm-gray); max-width: 400px; margin: 0 auto 2.5rem; animation: fadeUp 0.6s 0.4s ease both; }
+
+    /* 注文サマリー */
+    .order-summary {
       background: var(--white); border: 1px solid rgba(212,111,160,0.2);
-      padding: 1.5rem 3rem; margin-bottom: 2.5rem;
+      padding: 2rem 3rem; margin-bottom: 2.5rem; min-width: 320px;
       animation: fadeUp 0.6s 0.5s ease both;
     }
-    .order-label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--warm-gray); margin-bottom: 0.3rem; }
-    .order-number { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 400; color: var(--purple); letter-spacing: 0.1em; }
- 
-    /* ファネル完了表示 */
-    .funnel-complete {
-      display: flex; align-items: center; gap: 0;
-      margin-bottom: 3rem; flex-wrap: wrap; justify-content: center;
-      animation: fadeUp 0.6s 0.6s ease both;
-    }
-    .funnel-step-done {
-      display: flex; align-items: center; gap: 0.4rem;
-      font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase;
-      padding: 0.4rem 0.8rem; color: var(--accent);
-    }
+    .order-row { display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 0; font-size: 0.82rem; border-bottom: 1px solid rgba(212,111,160,0.1); }
+    .order-row:last-child { border-bottom: none; font-weight: 500; color: var(--purple); font-size: 0.9rem; margin-top: 0.5rem; }
+    .order-label-text { color: var(--warm-gray); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; }
+    .order-number-val { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--purple); }
+
+    .funnel-complete { display: flex; align-items: center; margin-bottom: 3rem; flex-wrap: wrap; justify-content: center; animation: fadeUp 0.6s 0.6s ease both; }
+    .funnel-step-done { display: flex; align-items: center; gap: 0.4rem; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.4rem 0.8rem; color: var(--accent); }
     .funnel-step-done .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
     .funnel-step-done.final { font-weight: 500; color: var(--purple); }
     .funnel-step-done.final .dot { background: var(--purple); width: 9px; height: 9px; }
     .funnel-arrow-done { color: rgba(212,111,160,0.5); font-size: 0.8rem; }
- 
+
     .thanks-actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; animation: fadeUp 0.6s 0.7s ease both; }
     .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.9rem 2rem; font-family: 'Noto Sans JP', sans-serif; font-size: 0.75rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; border: none; cursor: pointer; transition: all 0.3s ease; text-decoration: none; }
     .btn-primary { background: linear-gradient(135deg, var(--purple) 0%, var(--accent) 100%); color: var(--white); }
     .btn-primary:hover { background: linear-gradient(135deg, var(--accent) 0%, var(--purple) 100%); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,111,160,0.4); }
     .btn-outline { background: transparent; color: var(--charcoal); border: 1px solid var(--charcoal); }
     .btn-outline:hover { background: var(--charcoal); color: var(--white); transform: translateY(-2px); }
- 
+
     footer { text-align: center; padding: 2rem; font-size: 0.72rem; letter-spacing: 0.1em; color: var(--warm-gray); border-top: 1px solid rgba(212,111,160,0.15); }
- 
+
     @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes popIn { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); } }
- 
-    @media (max-width: 480px) { .nav-links { display: none; } .order-box { padding: 1.2rem 2rem; } }
+    @media (max-width: 480px) { .nav-links { display: none; } .order-summary { padding: 1.2rem 1.5rem; min-width: unset; width: 100%; } }
   </style>
 </head>
 <body>
- 
+
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WNZXRZZF"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
- 
+
+<!-- データレイヤー確認パネル（学習用） -->
+<div class="datalayer-panel">
+  <div class="panel-title">▶ DataLayer Monitor（学習用）</div>
+  <div id="panel-content">purchase イベント発火済み ✓　／　注文ID・合計金額・商品情報をGA4に送信しました</div>
+</div>
+
 <nav>
   <a href="index.html" class="nav-logo">TestSite</a>
   <ul class="nav-links">
@@ -133,21 +149,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <li><a href="shop.html">ショップ</a></li>
   </ul>
 </nav>
- 
+
 <div class="thanks-wrap">
- 
+
   <div class="check-circle">✓</div>
- 
+
   <p class="thanks-eyebrow">Order Complete</p>
   <h1 class="thanks-title">ありがとう<br><em>ございます</em></h1>
   <p class="thanks-sub">ご注文が完了しました。確認メールをお送りしましたので、ご確認ください。</p>
- 
-  <!-- 注文番号（テスト用） -->
-  <div class="order-box">
-    <div class="order-label">注文番号</div>
-    <div class="order-number" id="order-number">#TEST-00001</div>
+
+  <!-- 注文サマリー -->
+  <div class="order-summary">
+    <div class="order-row">
+      <span class="order-label-text">注文番号</span>
+      <span class="order-number-val" id="order-id">—</span>
+    </div>
+    <div class="order-row">
+      <span class="order-label-text">商品点数</span>
+      <span id="order-count">—</span>
+    </div>
+    <div class="order-row">
+      <span class="order-label-text">合計金額</span>
+      <span id="order-total">—</span>
+    </div>
   </div>
- 
+
   <!-- ファネル完了 -->
   <div class="funnel-complete">
     <div class="funnel-step-done"><span class="dot"></span>商品閲覧</div>
@@ -156,25 +182,33 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <span class="funnel-arrow-done">→</span>
     <div class="funnel-step-done"><span class="dot"></span>カート追加</div>
     <span class="funnel-arrow-done">→</span>
+    <div class="funnel-step-done"><span class="dot"></span>チェックアウト</div>
+    <span class="funnel-arrow-done">→</span>
     <div class="funnel-step-done final"><span class="dot"></span>購入完了 ✓</div>
   </div>
- 
+
   <div class="thanks-actions">
     <a href="shop.html" class="btn btn-primary">引き続きショッピング</a>
     <a href="index.html" class="btn btn-outline">トップへ戻る</a>
   </div>
- 
+
 </div>
- 
+
 <footer>
   <p>&copy; 2026 TestSite — GTM Learning Project</p>
 </footer>
- 
+
 <script>
-  // テスト用にランダムな注文番号を生成
-  const num = 'TEST-' + String(Math.floor(Math.random() * 99999)).padStart(5, '0');
-  document.getElementById('order-number').textContent = '#' + num;
+  // 注文サマリーを表示
+  const params = new URLSearchParams(window.location.search);
+  const total = parseInt(params.get('total') || '0');
+  const items = JSON.parse(decodeURIComponent(params.get('items') || '[]'));
+  const orderId = 'ORDER-' + String(Math.floor(Math.random() * 99999)).padStart(5, '0');
+
+  document.getElementById('order-id').textContent = orderId;
+  document.getElementById('order-count').textContent = items.length > 0 ? items.length + '点' : '—';
+  document.getElementById('order-total').textContent = total > 0 ? '¥' + total.toLocaleString() : '—';
 </script>
- 
+
 </body>
 </html>
