@@ -19,215 +19,86 @@
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --cream: #fdf6fa;
-      --charcoal: #2d1f3d;
-      --warm-gray: #9b7fa8;
-      --accent: #d46fa0;
-      --accent-dark: #b84f84;
-      --purple: #7c4daa;
-      --purple-light: #a87dd4;
-      --white: #ffffff;
-      --success: #6abf8a;
+      --cream: #fdf6fa; --charcoal: #2d1f3d; --warm-gray: #9b7fa8;
+      --accent: #d46fa0; --accent-dark: #b84f84; --purple: #7c4daa;
+      --purple-light: #a87dd4; --white: #ffffff; --success: #6abf8a;
     }
-
     html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Noto Sans JP', sans-serif;
-      background-color: var(--cream);
-      color: var(--charcoal); font-weight: 300; line-height: 1.8;
-    }
+    body { font-family: 'Noto Sans JP', sans-serif; background-color: var(--cream); color: var(--charcoal); font-weight: 300; line-height: 1.8; }
 
-    /* NAV */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; justify-content: space-between; align-items: center;
-      padding: 1.2rem 2.5rem;
-      background: rgba(253,246,250,0.92); backdrop-filter: blur(8px);
-      border-bottom: 1px solid rgba(212,111,160,0.2);
+      padding: 1.2rem 2.5rem; background: rgba(253,246,250,0.92);
+      backdrop-filter: blur(8px); border-bottom: 1px solid rgba(212,111,160,0.2);
     }
-    .nav-logo {
-      font-family: 'Cormorant Garamond', serif; font-size: 1.4rem;
-      font-weight: 600; letter-spacing: 0.08em; color: var(--charcoal); text-decoration: none;
-    }
+    .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 600; letter-spacing: 0.08em; color: var(--charcoal); text-decoration: none; }
     .nav-links { display: flex; gap: 2rem; list-style: none; }
-    .nav-links a {
-      font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
-      color: var(--warm-gray); text-decoration: none; transition: color 0.3s;
-    }
+    .nav-links a { font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--warm-gray); text-decoration: none; transition: color 0.3s; }
     .nav-links a:hover, .nav-links a.active { color: var(--accent); }
 
-    /* PAGE HEADER */
-    .page-header {
-      padding: 8rem 2rem 3rem; text-align: center;
-      background: linear-gradient(160deg, var(--cream) 60%, rgba(212,111,160,0.08) 100%);
-    }
-    .page-header p {
-      font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase;
-      color: var(--purple-light); margin-bottom: 0.8rem;
-    }
-    .page-header h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 300; color: var(--charcoal);
-    }
+    .page-header { padding: 8rem 2rem 3rem; text-align: center; background: linear-gradient(160deg, var(--cream) 60%, rgba(212,111,160,0.08) 100%); }
+    .page-header p { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--purple-light); margin-bottom: 0.8rem; }
+    .page-header h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 300; color: var(--charcoal); }
     .page-header h1 em { font-style: italic; color: var(--accent); }
 
-    /* FUNNEL GUIDE */
-    .funnel-guide {
-      display: flex; justify-content: center; align-items: center;
-      gap: 0; padding: 1.5rem 2rem; background: var(--white);
-      border-bottom: 1px solid rgba(212,111,160,0.15);
-      flex-wrap: wrap;
-    }
-    .funnel-step {
-      display: flex; align-items: center; gap: 0.5rem;
-      font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
-      color: var(--warm-gray); padding: 0.4rem 1rem;
-    }
-    .funnel-step .dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: rgba(212,111,160,0.3);
-    }
+    .funnel-guide { display: flex; justify-content: center; align-items: center; gap: 0; padding: 1.5rem 2rem; background: var(--white); border-bottom: 1px solid rgba(212,111,160,0.15); flex-wrap: wrap; }
+    .funnel-step { display: flex; align-items: center; gap: 0.5rem; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--warm-gray); padding: 0.4rem 1rem; }
+    .funnel-step .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(212,111,160,0.3); }
     .funnel-step.active { color: var(--accent); }
     .funnel-step.active .dot { background: var(--accent); }
     .funnel-arrow { color: rgba(212,111,160,0.4); font-size: 0.8rem; }
 
-    /* PRODUCTS GRID */
     .shop-container { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 5rem; }
-    .shop-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 2rem;
-    }
+    .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
 
-    /* PRODUCT CARD */
-    .product-card {
-      background: var(--white);
-      border: 1px solid rgba(212,111,160,0.12);
-      overflow: hidden; transition: all 0.3s ease;
-      position: relative;
-    }
-    .product-card:hover {
-      transform: translateY(-4px); box-shadow: 0 16px 48px rgba(124,77,170,0.12);
-    }
-
-    .product-image {
-      width: 100%; aspect-ratio: 4/3;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 4rem; position: relative; overflow: hidden;
-    }
+    .product-card { background: var(--white); border: 1px solid rgba(212,111,160,0.12); overflow: hidden; transition: all 0.3s ease; position: relative; }
+    .product-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(124,77,170,0.12); }
+    .product-image { width: 100%; aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; font-size: 4rem; position: relative; overflow: hidden; }
     .product-image-a { background: linear-gradient(135deg, #f8d7e8 0%, #e8d0f0 100%); }
     .product-image-b { background: linear-gradient(135deg, #d0e8f8 0%, #d8d0f8 100%); }
     .product-image-c { background: linear-gradient(135deg, #f8e8d0 0%, #f0d0e8 100%); }
 
-    .product-badge {
-      position: absolute; top: 1rem; left: 1rem;
-      padding: 0.25rem 0.75rem; font-size: 0.6rem; letter-spacing: 0.15em;
-      text-transform: uppercase; font-weight: 500;
-    }
+    .product-badge { position: absolute; top: 1rem; left: 1rem; padding: 0.25rem 0.75rem; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 500; }
     .badge-new { background: var(--purple); color: var(--white); }
     .badge-sale { background: var(--accent); color: var(--white); }
 
-    /* お気に入りボタン（右上） */
-    .btn-favorite {
-      position: absolute; top: 1rem; right: 1rem;
-      width: 36px; height: 36px; border-radius: 50%;
-      background: rgba(255,255,255,0.9); border: 1px solid rgba(212,111,160,0.3);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; font-size: 1rem; transition: all 0.3s ease;
-      backdrop-filter: blur(4px);
-    }
-    .btn-favorite:hover {
-      background: var(--accent); border-color: var(--accent);
-      transform: scale(1.1);
-    }
+    .btn-favorite { position: absolute; top: 1rem; right: 1rem; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.9); border: 1px solid rgba(212,111,160,0.3); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem; transition: all 0.3s ease; backdrop-filter: blur(4px); }
+    .btn-favorite:hover { background: var(--accent); border-color: var(--accent); transform: scale(1.1); }
     .btn-favorite.active { background: var(--accent); border-color: var(--accent); }
 
     .product-info { padding: 1.5rem; }
-    .product-category {
-      font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
-      color: var(--purple-light); margin-bottom: 0.4rem;
-    }
-    .product-name {
-      font-family: 'Cormorant Garamond', serif; font-size: 1.4rem;
-      font-weight: 400; margin-bottom: 0.4rem; line-height: 1.3;
-    }
+    .product-category { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--purple-light); margin-bottom: 0.4rem; }
+    .product-name { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 400; margin-bottom: 0.4rem; line-height: 1.3; }
     .product-desc { font-size: 0.78rem; color: var(--warm-gray); margin-bottom: 1rem; }
-    .product-price {
-      font-family: 'Cormorant Garamond', serif; font-size: 1.6rem;
-      font-weight: 300; color: var(--charcoal); margin-bottom: 1.2rem;
-    }
+    .product-price { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 300; color: var(--charcoal); margin-bottom: 1.2rem; }
     .product-price span { font-size: 0.8rem; color: var(--warm-gray); }
 
     .product-actions { display: flex; gap: 0.8rem; }
-    .btn-add-cart {
-      flex: 1; padding: 0.8rem 1rem;
-      background: linear-gradient(135deg, var(--purple) 0%, var(--accent) 100%);
-      color: var(--white); border: none; cursor: pointer;
-      font-family: 'Noto Sans JP', sans-serif; font-size: 0.72rem;
-      font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
-      transition: all 0.3s ease;
-    }
-    .btn-add-cart:hover {
-      background: linear-gradient(135deg, var(--accent) 0%, var(--purple) 100%);
-      transform: translateY(-1px); box-shadow: 0 4px 16px rgba(212,111,160,0.4);
-    }
+    .btn-add-cart { flex: 1; padding: 0.8rem 1rem; background: linear-gradient(135deg, var(--purple) 0%, var(--accent) 100%); color: var(--white); border: none; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; transition: all 0.3s ease; }
+    .btn-add-cart:hover { background: linear-gradient(135deg, var(--accent) 0%, var(--purple) 100%); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(212,111,160,0.4); }
     .btn-add-cart.added { background: var(--success); }
 
-    /* CART SIDEBAR */
-    .cart-bar {
-      position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
-      background: var(--charcoal); color: var(--white);
-      padding: 1rem 2rem; display: flex; align-items: center;
-      justify-content: space-between; flex-wrap: wrap; gap: 1rem;
-      transform: translateY(100%); transition: transform 0.4s ease;
-    }
+    .cart-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; background: var(--charcoal); color: var(--white); padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; transform: translateY(100%); transition: transform 0.4s ease; }
     .cart-bar.visible { transform: translateY(0); }
     .cart-bar-info { font-size: 0.8rem; }
     .cart-bar-info strong { font-size: 1rem; color: var(--accent); }
     .cart-bar-actions { display: flex; gap: 0.8rem; }
-    .btn-checkout {
-      padding: 0.7rem 2rem;
-      background: linear-gradient(135deg, var(--purple) 0%, var(--accent) 100%);
-      color: var(--white); border: none; cursor: pointer;
-      font-family: 'Noto Sans JP', sans-serif; font-size: 0.75rem;
-      font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
-      transition: all 0.3s ease;
-    }
+
+    /* 購入するボタン → thanks.htmlへ遷移 */
+    .btn-checkout { padding: 0.7rem 2rem; background: linear-gradient(135deg, var(--purple) 0%, var(--accent) 100%); color: var(--white); border: none; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; transition: all 0.3s ease; text-decoration: none; display: inline-flex; align-items: center; }
     .btn-checkout:hover { opacity: 0.9; transform: translateY(-1px); }
-    .btn-clear-cart {
-      padding: 0.7rem 1.2rem; background: transparent;
-      color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.2);
-      cursor: pointer; font-size: 0.7rem; letter-spacing: 0.08em;
-      transition: all 0.3s ease;
-    }
+    .btn-clear-cart { padding: 0.7rem 1.2rem; background: transparent; color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.2); cursor: pointer; font-size: 0.7rem; letter-spacing: 0.08em; transition: all 0.3s ease; }
     .btn-clear-cart:hover { color: var(--white); border-color: rgba(255,255,255,0.5); }
 
-    /* TOAST */
-    .toast {
-      position: fixed; top: 5rem; right: 1.5rem; z-index: 300;
-      padding: 0.8rem 1.5rem;
-      background: var(--charcoal); color: var(--white);
-      font-size: 0.78rem; letter-spacing: 0.05em;
-      border-left: 3px solid var(--accent);
-      transform: translateX(120%); transition: transform 0.3s ease;
-      max-width: 280px;
-    }
+    .toast { position: fixed; top: 5rem; right: 1.5rem; z-index: 300; padding: 0.8rem 1.5rem; background: var(--charcoal); color: var(--white); font-size: 0.78rem; letter-spacing: 0.05em; border-left: 3px solid var(--accent); transform: translateX(120%); transition: transform 0.3s ease; max-width: 280px; }
     .toast.show { transform: translateX(0); }
 
-    footer {
-      text-align: center; padding: 3rem 2rem; font-size: 0.72rem;
-      letter-spacing: 0.1em; color: var(--warm-gray);
-      border-top: 1px solid rgba(212,111,160,0.15);
-    }
+    footer { text-align: center; padding: 3rem 2rem 6rem; font-size: 0.72rem; letter-spacing: 0.1em; color: var(--warm-gray); border-top: 1px solid rgba(212,111,160,0.15); }
     footer a { color: var(--accent); text-decoration: none; }
 
-    @media (max-width: 768px) {
-      nav { padding: 1rem 1.5rem; }
-      .funnel-guide { gap: 0; }
-      .shop-grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 768px) { nav { padding: 1rem 1.5rem; } .shop-grid { grid-template-columns: 1fr; } }
     @media (max-width: 480px) { .nav-links { display: none; } }
   </style>
 </head>
@@ -238,10 +109,8 @@
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-<!-- TOAST通知 -->
 <div class="toast" id="toast"></div>
 
-<!-- NAV -->
 <nav>
   <a href="index.html" class="nav-logo">TestSite</a>
   <ul class="nav-links">
@@ -250,13 +119,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </ul>
 </nav>
 
-<!-- PAGE HEADER -->
 <div class="page-header">
   <p>D2C Funnel Test</p>
   <h1>Shop <em>Collection</em></h1>
 </div>
 
-<!-- ファネルの流れを可視化 -->
 <div class="funnel-guide">
   <div class="funnel-step active"><span class="dot"></span>商品閲覧</div>
   <span class="funnel-arrow">→</span>
@@ -267,16 +134,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="funnel-step"><span class="dot"></span>購入</div>
 </div>
 
-<!-- PRODUCTS -->
 <div class="shop-container">
   <div class="shop-grid">
 
-    <!-- 商品A -->
     <div class="product-card">
       <div class="product-image product-image-a">
         🌸
         <span class="product-badge badge-new">New</span>
-        <!-- お気に入り → id: btn-favorite-a -->
         <button class="btn-favorite" id="btn-favorite-a" title="お気に入り追加">🤍</button>
       </div>
       <div class="product-info">
@@ -285,18 +149,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="product-desc">桜エキス配合の美容液。うるおいを与えながら透明感を高めます。</div>
         <div class="product-price">¥8,800 <span>（税込）</span></div>
         <div class="product-actions">
-          <!-- カート追加 → id: btn-cart-a -->
           <button class="btn-add-cart" id="btn-cart-a" data-name="Sakura Serum" data-price="8800">カートに追加</button>
         </div>
       </div>
     </div>
 
-    <!-- 商品B -->
     <div class="product-card">
       <div class="product-image product-image-b">
         💜
         <span class="product-badge badge-sale">Sale</span>
-        <!-- お気に入り → id: btn-favorite-b -->
         <button class="btn-favorite" id="btn-favorite-b" title="お気に入り追加">🤍</button>
       </div>
       <div class="product-info">
@@ -305,17 +166,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="product-desc">ラベンダーの香りのボディミスト。リラックスタイムのお供に。</div>
         <div class="product-price">¥4,400 <span>（税込）</span></div>
         <div class="product-actions">
-          <!-- カート追加 → id: btn-cart-b -->
           <button class="btn-add-cart" id="btn-cart-b" data-name="Lavender Mist" data-price="4400">カートに追加</button>
         </div>
       </div>
     </div>
 
-    <!-- 商品C -->
     <div class="product-card">
       <div class="product-image product-image-c">
         ✨
-        <!-- お気に入り → id: btn-favorite-c -->
         <button class="btn-favorite" id="btn-favorite-c" title="お気に入り追加">🤍</button>
       </div>
       <div class="product-info">
@@ -324,7 +182,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="product-desc">ゴールド配合のフェイスマスク。特別な日の前夜に使いたい一品。</div>
         <div class="product-price">¥12,100 <span>（税込）</span></div>
         <div class="product-actions">
-          <!-- カート追加 → id: btn-cart-c -->
           <button class="btn-add-cart" id="btn-cart-c" data-name="Gold Mask" data-price="12100">カートに追加</button>
         </div>
       </div>
@@ -333,7 +190,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </div>
 
-<!-- カートバー（カート追加後に表示） -->
+<!-- カートバー -->
 <div class="cart-bar" id="cart-bar">
   <div class="cart-bar-info">
     🛒 カート内 <strong id="cart-count">0</strong> 点
@@ -341,8 +198,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
   <div class="cart-bar-actions">
     <button class="btn-clear-cart" id="btn-clear-cart">クリア</button>
-    <!-- 購入ボタン → id: btn-purchase -->
-    <button class="btn-checkout" id="btn-purchase">購入する →</button>
+    <!-- 購入するボタン → thanks.htmlへ遷移 / GTMで btn-purchase として計測 -->
+    <a href="thanks.html" id="btn-purchase" class="btn-checkout">購入する →</a>
   </div>
 </div>
 
@@ -352,10 +209,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </footer>
 
 <script>
-  // カート状態
   let cart = { count: 0, total: 0 };
 
-  // Toast通知
   function showToast(msg) {
     const t = document.getElementById('toast');
     t.textContent = msg;
@@ -363,7 +218,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     setTimeout(() => t.classList.remove('show'), 2500);
   }
 
-  // カートバー更新
   function updateCartBar() {
     document.getElementById('cart-count').textContent = cart.count;
     document.getElementById('cart-total').textContent = '¥' + cart.total.toLocaleString();
@@ -371,7 +225,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     cart.count > 0 ? bar.classList.add('visible') : bar.classList.remove('visible');
   }
 
-  // お気に入りボタン
   ['a','b','c'].forEach(id => {
     const btn = document.getElementById('btn-favorite-' + id);
     btn.addEventListener('click', () => {
@@ -381,7 +234,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     });
   });
 
-  // カート追加ボタン
   document.querySelectorAll('.btn-add-cart').forEach(btn => {
     btn.addEventListener('click', () => {
       const name = btn.dataset.name;
@@ -399,18 +251,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     });
   });
 
-  // カートクリア
   document.getElementById('btn-clear-cart').addEventListener('click', () => {
     cart = { count: 0, total: 0 };
     updateCartBar();
     showToast('カートを空にしました');
-  });
-
-  // 購入ボタン
-  document.getElementById('btn-purchase').addEventListener('click', () => {
-    showToast('🎉 ご購入ありがとうございます！（テスト）');
-    cart = { count: 0, total: 0 };
-    updateCartBar();
   });
 </script>
 
