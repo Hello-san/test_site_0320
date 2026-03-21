@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ショップ — テストサイト</title>
-
+ 
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -12,11 +12,29 @@
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','GTM-WNZXRZZF');</script>
   <!-- End Google Tag Manager -->
-
+ 
+  <!-- ★ データレイヤー初期化（GTMより前に必ず書く） -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+ 
+    // ① 商品閲覧イベント（ページ表示時に自動発火）
+    dataLayer.push({ ecommerce: null }); // 前のecommerceデータをクリア
+    dataLayer.push({
+      event: 'view_item_list',
+      ecommerce: {
+        items: [
+          { item_name: 'Sakura Serum',   item_id: 'SKU-001', price: 8800,  index: 1 },
+          { item_name: 'Lavender Mist',  item_id: 'SKU-002', price: 4400,  index: 2 },
+          { item_name: 'Gold Mask',      item_id: 'SKU-003', price: 12100, index: 3 }
+        ]
+      }
+    });
+  </script>
+ 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
-
+ 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -26,7 +44,7 @@
     }
     html { scroll-behavior: smooth; }
     body { font-family: 'Noto Sans JP', sans-serif; background-color: var(--cream); color: var(--charcoal); font-weight: 300; line-height: 1.8; }
-
+ 
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; justify-content: space-between; align-items: center;
@@ -37,80 +55,87 @@
     .nav-links { display: flex; gap: 2rem; list-style: none; }
     .nav-links a { font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--warm-gray); text-decoration: none; transition: color 0.3s; }
     .nav-links a:hover, .nav-links a.active { color: var(--accent); }
-
+ 
     .page-header { padding: 8rem 2rem 3rem; text-align: center; background: linear-gradient(160deg, var(--cream) 60%, rgba(212,111,160,0.08) 100%); }
     .page-header p { font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--purple-light); margin-bottom: 0.8rem; }
     .page-header h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 300; color: var(--charcoal); }
     .page-header h1 em { font-style: italic; color: var(--accent); }
-
-    .funnel-guide { display: flex; justify-content: center; align-items: center; gap: 0; padding: 1.5rem 2rem; background: var(--white); border-bottom: 1px solid rgba(212,111,160,0.15); flex-wrap: wrap; }
+ 
+    .funnel-guide { display: flex; justify-content: center; align-items: center; padding: 1.5rem 2rem; background: var(--white); border-bottom: 1px solid rgba(212,111,160,0.15); flex-wrap: wrap; }
     .funnel-step { display: flex; align-items: center; gap: 0.5rem; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--warm-gray); padding: 0.4rem 1rem; }
     .funnel-step .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(212,111,160,0.3); }
     .funnel-step.active { color: var(--accent); }
     .funnel-step.active .dot { background: var(--accent); }
     .funnel-arrow { color: rgba(212,111,160,0.4); font-size: 0.8rem; }
-
+ 
+    /* データレイヤー確認パネル */
+    .datalayer-panel {
+      background: var(--charcoal); color: #a8d8a8;
+      font-family: monospace; font-size: 0.72rem; line-height: 1.6;
+      padding: 1rem 2rem; border-bottom: 2px solid var(--accent);
+    }
+    .datalayer-panel .panel-title { color: var(--accent); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 0.5rem; }
+    .datalayer-log { max-height: 120px; overflow-y: auto; }
+ 
     .shop-container { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 5rem; }
     .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
-
+ 
     .product-card { background: var(--white); border: 1px solid rgba(212,111,160,0.12); overflow: hidden; transition: all 0.3s ease; position: relative; }
     .product-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(124,77,170,0.12); }
-    .product-image { width: 100%; aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; font-size: 4rem; position: relative; overflow: hidden; }
+    .product-image { width: 100%; aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; font-size: 4rem; position: relative; overflow: hidden; cursor: pointer; }
     .product-image-a { background: linear-gradient(135deg, #f8d7e8 0%, #e8d0f0 100%); }
     .product-image-b { background: linear-gradient(135deg, #d0e8f8 0%, #d8d0f8 100%); }
     .product-image-c { background: linear-gradient(135deg, #f8e8d0 0%, #f0d0e8 100%); }
-
+ 
     .product-badge { position: absolute; top: 1rem; left: 1rem; padding: 0.25rem 0.75rem; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 500; }
     .badge-new { background: var(--purple); color: var(--white); }
     .badge-sale { background: var(--accent); color: var(--white); }
-
-    .btn-favorite { position: absolute; top: 1rem; right: 1rem; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.9); border: 1px solid rgba(212,111,160,0.3); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem; transition: all 0.3s ease; backdrop-filter: blur(4px); }
+ 
+    .btn-favorite { position: absolute; top: 1rem; right: 1rem; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.9); border: 1px solid rgba(212,111,160,0.3); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem; transition: all 0.3s ease; }
     .btn-favorite:hover { background: var(--accent); border-color: var(--accent); transform: scale(1.1); }
     .btn-favorite.active { background: var(--accent); border-color: var(--accent); }
-
+ 
     .product-info { padding: 1.5rem; }
     .product-category { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--purple-light); margin-bottom: 0.4rem; }
     .product-name { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 400; margin-bottom: 0.4rem; line-height: 1.3; }
     .product-desc { font-size: 0.78rem; color: var(--warm-gray); margin-bottom: 1rem; }
     .product-price { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 300; color: var(--charcoal); margin-bottom: 1.2rem; }
     .product-price span { font-size: 0.8rem; color: var(--warm-gray); }
-
+ 
     .product-actions { display: flex; gap: 0.8rem; }
     .btn-add-cart { flex: 1; padding: 0.8rem 1rem; background: linear-gradient(135deg, var(--purple) 0%, var(--accent) 100%); color: var(--white); border: none; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; transition: all 0.3s ease; }
     .btn-add-cart:hover { background: linear-gradient(135deg, var(--accent) 0%, var(--purple) 100%); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(212,111,160,0.4); }
     .btn-add-cart.added { background: var(--success); }
-
+ 
     .cart-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; background: var(--charcoal); color: var(--white); padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; transform: translateY(100%); transition: transform 0.4s ease; }
     .cart-bar.visible { transform: translateY(0); }
     .cart-bar-info { font-size: 0.8rem; }
     .cart-bar-info strong { font-size: 1rem; color: var(--accent); }
     .cart-bar-actions { display: flex; gap: 0.8rem; }
-
-    /* 購入するボタン → thanks.htmlへ遷移 */
     .btn-checkout { padding: 0.7rem 2rem; background: linear-gradient(135deg, var(--purple) 0%, var(--accent) 100%); color: var(--white); border: none; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; transition: all 0.3s ease; text-decoration: none; display: inline-flex; align-items: center; }
     .btn-checkout:hover { opacity: 0.9; transform: translateY(-1px); }
     .btn-clear-cart { padding: 0.7rem 1.2rem; background: transparent; color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.2); cursor: pointer; font-size: 0.7rem; letter-spacing: 0.08em; transition: all 0.3s ease; }
     .btn-clear-cart:hover { color: var(--white); border-color: rgba(255,255,255,0.5); }
-
+ 
     .toast { position: fixed; top: 5rem; right: 1.5rem; z-index: 300; padding: 0.8rem 1.5rem; background: var(--charcoal); color: var(--white); font-size: 0.78rem; letter-spacing: 0.05em; border-left: 3px solid var(--accent); transform: translateX(120%); transition: transform 0.3s ease; max-width: 280px; }
     .toast.show { transform: translateX(0); }
-
+ 
     footer { text-align: center; padding: 3rem 2rem 6rem; font-size: 0.72rem; letter-spacing: 0.1em; color: var(--warm-gray); border-top: 1px solid rgba(212,111,160,0.15); }
     footer a { color: var(--accent); text-decoration: none; }
-
+ 
     @media (max-width: 768px) { nav { padding: 1rem 1.5rem; } .shop-grid { grid-template-columns: 1fr; } }
     @media (max-width: 480px) { .nav-links { display: none; } }
   </style>
 </head>
 <body>
-
+ 
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WNZXRZZF"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
-
+ 
 <div class="toast" id="toast"></div>
-
+ 
 <nav>
   <a href="index.html" class="nav-logo">TestSite</a>
   <ul class="nav-links">
@@ -118,12 +143,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <li><a href="shop.html" class="active">ショップ</a></li>
   </ul>
 </nav>
-
+ 
 <div class="page-header">
   <p>D2C Funnel Test</p>
   <h1>Shop <em>Collection</em></h1>
 </div>
-
+ 
 <div class="funnel-guide">
   <div class="funnel-step active"><span class="dot"></span>商品閲覧</div>
   <span class="funnel-arrow">→</span>
@@ -131,14 +156,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <span class="funnel-arrow">→</span>
   <div class="funnel-step"><span class="dot"></span>カート追加</div>
   <span class="funnel-arrow">→</span>
-  <div class="funnel-step"><span class="dot"></span>購入</div>
+  <div class="funnel-step"><span class="dot"></span>チェックアウト</div>
+  <span class="funnel-arrow">→</span>
+  <div class="funnel-step"><span class="dot"></span>購入完了</div>
 </div>
-
+ 
+<!-- ★ データレイヤー確認パネル（学習用） -->
+<div class="datalayer-panel">
+  <div class="panel-title">▶ DataLayer Monitor（学習用）— 操作するとリアルタイムで更新されます</div>
+  <div class="datalayer-log" id="datalayer-log">ページ読み込み完了 → view_item_list イベント発火済み ✓</div>
+</div>
+ 
 <div class="shop-container">
   <div class="shop-grid">
-
+ 
+    <!-- 商品A -->
     <div class="product-card">
-      <div class="product-image product-image-a">
+      <div class="product-image product-image-a" id="view-item-a" data-id="SKU-001" data-name="Sakura Serum" data-price="8800">
         🌸
         <span class="product-badge badge-new">New</span>
         <button class="btn-favorite" id="btn-favorite-a" title="お気に入り追加">🤍</button>
@@ -149,13 +183,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="product-desc">桜エキス配合の美容液。うるおいを与えながら透明感を高めます。</div>
         <div class="product-price">¥8,800 <span>（税込）</span></div>
         <div class="product-actions">
-          <button class="btn-add-cart" id="btn-cart-a" data-name="Sakura Serum" data-price="8800">カートに追加</button>
+          <button class="btn-add-cart" id="btn-cart-a" data-id="SKU-001" data-name="Sakura Serum" data-price="8800">カートに追加</button>
         </div>
       </div>
     </div>
-
+ 
+    <!-- 商品B -->
     <div class="product-card">
-      <div class="product-image product-image-b">
+      <div class="product-image product-image-b" id="view-item-b" data-id="SKU-002" data-name="Lavender Mist" data-price="4400">
         💜
         <span class="product-badge badge-sale">Sale</span>
         <button class="btn-favorite" id="btn-favorite-b" title="お気に入り追加">🤍</button>
@@ -166,13 +201,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="product-desc">ラベンダーの香りのボディミスト。リラックスタイムのお供に。</div>
         <div class="product-price">¥4,400 <span>（税込）</span></div>
         <div class="product-actions">
-          <button class="btn-add-cart" id="btn-cart-b" data-name="Lavender Mist" data-price="4400">カートに追加</button>
+          <button class="btn-add-cart" id="btn-cart-b" data-id="SKU-002" data-name="Lavender Mist" data-price="4400">カートに追加</button>
         </div>
       </div>
     </div>
-
+ 
+    <!-- 商品C -->
     <div class="product-card">
-      <div class="product-image product-image-c">
+      <div class="product-image product-image-c" id="view-item-c" data-id="SKU-003" data-name="Gold Mask" data-price="12100">
         ✨
         <button class="btn-favorite" id="btn-favorite-c" title="お気に入り追加">🤍</button>
       </div>
@@ -182,14 +218,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="product-desc">ゴールド配合のフェイスマスク。特別な日の前夜に使いたい一品。</div>
         <div class="product-price">¥12,100 <span>（税込）</span></div>
         <div class="product-actions">
-          <button class="btn-add-cart" id="btn-cart-c" data-name="Gold Mask" data-price="12100">カートに追加</button>
+          <button class="btn-add-cart" id="btn-cart-c" data-id="SKU-003" data-name="Gold Mask" data-price="12100">カートに追加</button>
         </div>
       </div>
     </div>
-
+ 
   </div>
 </div>
-
+ 
 <!-- カートバー -->
 <div class="cart-bar" id="cart-bar">
   <div class="cart-bar-info">
@@ -198,65 +234,139 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
   <div class="cart-bar-actions">
     <button class="btn-clear-cart" id="btn-clear-cart">クリア</button>
-    <!-- 購入するボタン → thanks.htmlへ遷移 / GTMで btn-purchase として計測 -->
-    <a href="thanks.html" id="btn-purchase" class="btn-checkout">購入する →</a>
+    <button class="btn-checkout" id="btn-begin-checkout">購入手続きへ →</button>
   </div>
 </div>
-
+ 
 <footer>
   <a href="index.html">← トップページに戻る</a>
   <p style="margin-top:1rem;">&copy; 2026 TestSite — GTM Learning Project</p>
 </footer>
-
+ 
 <script>
-  let cart = { count: 0, total: 0 };
-
+  let cart = { count: 0, total: 0, items: [] };
+ 
+  // データレイヤーモニター表示
+  function logPanel(msg) {
+    const log = document.getElementById('datalayer-log');
+    const line = document.createElement('div');
+    line.textContent = '→ ' + msg;
+    line.style.color = '#f8d7e8';
+    log.appendChild(line);
+    log.scrollTop = log.scrollHeight;
+  }
+ 
   function showToast(msg) {
     const t = document.getElementById('toast');
     t.textContent = msg;
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 2500);
   }
-
+ 
   function updateCartBar() {
     document.getElementById('cart-count').textContent = cart.count;
     document.getElementById('cart-total').textContent = '¥' + cart.total.toLocaleString();
     const bar = document.getElementById('cart-bar');
     cart.count > 0 ? bar.classList.add('visible') : bar.classList.remove('visible');
   }
-
+ 
+  // ② 商品画像クリック → view_item
   ['a','b','c'].forEach(id => {
-    const btn = document.getElementById('btn-favorite-' + id);
-    btn.addEventListener('click', () => {
-      const isActive = btn.classList.toggle('active');
-      btn.textContent = isActive ? '❤️' : '🤍';
-      showToast(isActive ? '❤️ お気に入りに追加しました' : 'お気に入りから削除しました');
+    const img = document.getElementById('view-item-' + id);
+    img.addEventListener('click', (e) => {
+      if (e.target.classList.contains('btn-favorite')) return;
+      const name = img.dataset.name;
+      const price = parseInt(img.dataset.price);
+      const itemId = img.dataset.id;
+      dataLayer.push({ ecommerce: null });
+      dataLayer.push({
+        event: 'view_item',
+        ecommerce: {
+          items: [{ item_name: name, item_id: itemId, price: price, quantity: 1 }]
+        }
+      });
+      logPanel('view_item: ' + name + ' (¥' + price.toLocaleString() + ')');
+      showToast('👁 ' + name + ' を閲覧');
     });
   });
-
+ 
+  // お気に入り追加 → add_to_wishlist
+  ['a','b','c'].forEach(id => {
+    const btn = document.getElementById('btn-favorite-' + id);
+    const img = document.getElementById('view-item-' + id);
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isActive = btn.classList.toggle('active');
+      btn.textContent = isActive ? '❤️' : '🤍';
+      if (isActive) {
+        const name = img.dataset.name;
+        const price = parseInt(img.dataset.price);
+        const itemId = img.dataset.id;
+        dataLayer.push({ ecommerce: null });
+        dataLayer.push({
+          event: 'add_to_wishlist',
+          ecommerce: {
+            items: [{ item_name: name, item_id: itemId, price: price, quantity: 1 }]
+          }
+        });
+        logPanel('add_to_wishlist: ' + name);
+        showToast('❤️ ' + name + ' をお気に入り追加');
+      } else {
+        showToast('🤍 お気に入りから削除');
+      }
+    });
+  });
+ 
+  // ③ カート追加 → add_to_cart
   document.querySelectorAll('.btn-add-cart').forEach(btn => {
     btn.addEventListener('click', () => {
       const name = btn.dataset.name;
       const price = parseInt(btn.dataset.price);
+      const itemId = btn.dataset.id;
       cart.count++;
       cart.total += price;
+      cart.items.push({ item_name: name, item_id: itemId, price: price, quantity: 1 });
       updateCartBar();
+      dataLayer.push({ ecommerce: null });
+      dataLayer.push({
+        event: 'add_to_cart',
+        ecommerce: {
+          value: price,
+          currency: 'JPY',
+          items: [{ item_name: name, item_id: itemId, price: price, quantity: 1 }]
+        }
+      });
+      logPanel('add_to_cart: ' + name + ' (¥' + price.toLocaleString() + ')');
       btn.textContent = '✓ 追加済み';
       btn.classList.add('added');
-      setTimeout(() => {
-        btn.textContent = 'カートに追加';
-        btn.classList.remove('added');
-      }, 2000);
-      showToast('🛒 ' + name + ' をカートに追加しました');
+      setTimeout(() => { btn.textContent = 'カートに追加'; btn.classList.remove('added'); }, 2000);
+      showToast('🛒 ' + name + ' をカートに追加');
     });
   });
-
+ 
+  // カートクリア
   document.getElementById('btn-clear-cart').addEventListener('click', () => {
-    cart = { count: 0, total: 0 };
+    cart = { count: 0, total: 0, items: [] };
     updateCartBar();
     showToast('カートを空にしました');
   });
+ 
+  // ④ チェックアウト開始 → begin_checkout → thanks.htmlへ遷移
+  document.getElementById('btn-begin-checkout').addEventListener('click', () => {
+    dataLayer.push({ ecommerce: null });
+    dataLayer.push({
+      event: 'begin_checkout',
+      ecommerce: {
+        value: cart.total,
+        currency: 'JPY',
+        items: cart.items
+      }
+    });
+    logPanel('begin_checkout: 合計 ¥' + cart.total.toLocaleString() + ' (' + cart.count + '点)');
+    showToast('チェックアウト開始...');
+    setTimeout(() => { window.location.href = 'thanks.html'; }, 800);
+  });
 </script>
-
+ 
 </body>
 </html>
